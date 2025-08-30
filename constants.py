@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import utils
 
 argparse = {
     "description": "Script python qui génère un fichier Excel pour trouver le meilleur investissement BNP Paribas.",
@@ -154,7 +155,8 @@ worksheet = {
 
 column_mapping = [
     {
-        "name": "",
+        "name": f"Last Update:\n{utils.get_utc_time()}",
+        "size": 8,
         "items": [
             {
                 "ref": "favorite",
@@ -164,7 +166,8 @@ column_mapping = [
             {
                 "ref": "isin",
                 "name": "ISIN",
-                "width": 14
+                "width": 14,
+                "size": 16
             }
         ]
     },
@@ -194,7 +197,8 @@ column_mapping = [
             },
             {
                 "ref": "legal_name",
-                "name": "Nom Légal"
+                "name": "Nom Légal",
+                "size": 16
             },
             {
                 "ref": "legal_form",
@@ -215,7 +219,8 @@ column_mapping = [
             {
                 "ref": "share_vl",
                 "name": "Valeur\nliquidative",
-                "width": 6
+                "width": 6,
+                "size": 8
             },
             {
                 "ref": "currency",
@@ -291,6 +296,7 @@ column_mapping = [
                 "ref": "perf_cumulated",
                 "name": "Perf\ncumulée\n5 ans",
                 "width": 6,
+                "size": 8,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "610000",
@@ -338,7 +344,8 @@ column_mapping = [
             {
                 "ref": "dic_details",
                 "name": "Document\nd'Informations\nClés",
-                "width": 6
+                "width": 6,
+                "size": 7
             },
             {
                 "ref": "more_details",
@@ -349,11 +356,13 @@ column_mapping = [
     },
     {
         "name": "Rendement Scénarios 5 ans",
+        "size": 16,
         "items": [
             {
                 "ref": "scenario_stressed",
                 "name": "Tensions",
                 "width": 6,
+                "size": 8,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "610000",
@@ -366,6 +375,7 @@ column_mapping = [
                 "ref": "scenario_unfavorable",
                 "name": "Défavorable",
                 "width": 6,
+                "size": 8,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "610000",
@@ -378,6 +388,7 @@ column_mapping = [
                 "ref": "scenario_moderate",
                 "name": "Intermédiaire",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "610000",
@@ -390,6 +401,7 @@ column_mapping = [
                 "ref": "scenario_favorable",
                 "name": "Favorable",
                 "width": 6,
+                "size": 8,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "610000",
@@ -413,11 +425,13 @@ column_mapping = [
             },
             {
                 "ref": "portfolio_sectors",
-                "name": "Secteurs"
+                "name": "Secteurs",
+                "size": 12
             },
             {
                 "ref": "portfolio_countries",
-                "name": "Pays"
+                "name": "Pays",
+                "size": 12
             }
         ]
     },
@@ -428,6 +442,7 @@ column_mapping = [
                 "ref": "fee_conversion_rate",
                 "name": "Coûts de\nconversion",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",
@@ -440,6 +455,7 @@ column_mapping = [
                 "ref": "fee_ongoing_charges",
                 "name": "Frais courants\nestimés",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",
@@ -452,6 +468,7 @@ column_mapping = [
                 "ref": "fee_maximum_subscription",
                 "name": "Frais\nd'entrée max",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",
@@ -464,6 +481,7 @@ column_mapping = [
                 "ref": "fee_maximum_redemption",
                 "name": "Frais de\nsortie max",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",
@@ -476,6 +494,7 @@ column_mapping = [
                 "ref": "fee_real_ongoing",
                 "name": "Frais courants\nréels",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",
@@ -488,6 +507,7 @@ column_mapping = [
                 "ref": "fee_redemption_acquired",
                 "name": "Commissions de rachat\nacquises au fonds",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",
@@ -500,6 +520,7 @@ column_mapping = [
                 "ref": "fee_maximum_management",
                 "name": "Commission de\ngestion max",
                 "width": 6,
+                "size": 7,
                 "conditional-formatting": {
                     "fill-percentile": {
                         "start_color": "005E23",

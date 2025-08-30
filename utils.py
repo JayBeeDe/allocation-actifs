@@ -3,6 +3,7 @@
 
 import argparse
 import csv
+import datetime
 import json
 import os
 import requests
@@ -156,3 +157,8 @@ def join_h(lst):
         return lst[0]
     last_item = lst.pop()
     return " and ".join([", ".join(lst), last_item])
+
+
+def get_utc_time():
+    utc_now = datetime.datetime.utcnow()
+    return utc_now.strftime("%Y-%m-%d %H:%M:%S UTC")

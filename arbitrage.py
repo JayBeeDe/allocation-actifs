@@ -439,7 +439,7 @@ def export_to_file(data):
         cell.font = Font(
             bold=True,
             color="FFFFFF",
-            size=18
+            size=column_group["size"] if "size" in column_group else 18
         )
         cell.border = header_border
         cell.fill = header_fill
@@ -447,11 +447,11 @@ def export_to_file(data):
         i += len(column_group["items"])
     worksheet.row_dimensions[1].height = 30
     i = 1
-    for col_title in [subitem["name"] for item in constants.column_mapping for subitem in item["items"]]:
+    for subitem in [subitem for item in constants.column_mapping for subitem in item["items"]]:
         cell = worksheet.cell(
             row=2,
             column=i,
-            value=col_title
+            value=subitem["name"]
         )
         cell.alignment = Alignment(
             horizontal="center",
@@ -460,7 +460,7 @@ def export_to_file(data):
         cell.font = Font(
             bold=True,
             color="FFFFFF",
-            size=10
+            size=subitem["size"] if "size" in subitem else 10
         )
         cell.border = header_border
         cell.fill = header_fill
