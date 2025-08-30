@@ -45,6 +45,12 @@ argparse = {
                     "default": None
                 },
                 {
+                    "name": "favorites",
+                    "short": "f",
+                    "description": "Path to a comma separated list file (csv) with some ISIN to mark as favorite (default is %(default)s)",
+                    "default": "favorites.csv"
+                },
+                {
                     "name": "type",
                     "short": "t",
                     "description": "Type of investor (default is %(default)s)",
@@ -61,7 +67,7 @@ argparse = {
             "items": [
                 {
                     "name": "file",
-                    "short": "f",
+                    "short": "o",
                     "description": "Output Excel file (default is %(default)s)",
                     "default": f"{os.getcwd()}/arbitrage.xlsx"
                 }
@@ -79,6 +85,8 @@ type_to_website_prefix = {
     "Private investor": "individuel",
     "Institutional investor or Financial intermediaries": "intermediaires",
 }
+
+favorites_main_key = "isin"
 
 more_details_domain = "https://www.quantalys.com"
 more_details_cookie = "UQY4IPIWOASM4GQGUWJBCHPU4VEQPCGBKDRKFXCHSXJIWTIOYPQKCY2NFOO4RZ7LAU6NNSQQX5UVQJT767P677SOKY3SEW74PBUDHBEQEWH4E===;"
@@ -148,6 +156,11 @@ column_mapping = [
     {
         "name": "",
         "items": [
+            {
+                "ref": "favorite",
+                "name": "⭐",
+                "width": 3
+            },
             {
                 "ref": "isin",
                 "name": "ISIN",

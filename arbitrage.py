@@ -110,6 +110,10 @@ def get_fund_data(fund):
             raise ValueError(f"ISIN mismatch (expected {fund}, got {isin})")
         output_item["isin"] = isin
 
+        output_item["favorite"] = ""
+        if output_item["isin"] in args.favorites:
+            output_item["favorite"] = args.favorites[output_item["isin"]]["label"]
+
         output_item["currency"] = api_response["portfolio"]["base_currency"]
         if output_item["currency"] == "Euro" and api_response["performances"]["disclaimers"]["currency_fluctuation_not_euro"]["EUR"] and api_response["performances"]["disclaimers"]["currency_fluctuation_not_euro"]["EUR"] is None:
             raise ValueError("Base currency mismatch with currency disclaimer for fund " + fund)
@@ -462,7 +466,7 @@ def export_to_file(data):
         cell.fill = header_fill
         i += 1
     worksheet.row_dimensions[2].height = 30
-    worksheet.freeze_panes = "B3"
+    worksheet.freeze_panes = f"{get_column_letter(len(constants.column_mapping[0]['items'])+1)}3"
     worksheet.auto_filter.ref = f"A2:{get_column_letter(worksheet.max_column)}2"
 
     j = 3
@@ -505,7 +509,7 @@ def export_to_file(data):
                 size=12,
                 color="FFFFFF"
             )
-            if i == 1:
+            if i <= len(constants.column_mapping[0]["items"]):  # header column since first column mapping group
                 cell.font = Font(
                     bold=True
                 )

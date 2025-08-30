@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import csv
 import json
 import os
 import requests
@@ -31,7 +32,19 @@ def parse_args():
     return parser.parse_args()
 
 
-def read_file(file_path):
+def merge_lists_deduped(list1, list2):
+    if not isinstance(list1, list) or not isinstance(list2, list):
+        raise TypeError
+    merged = list1[:]
+    seen = set(list1)
+    for x in list2:
+        if x not in seen:
+            merged.append(x)
+            seen.add(x)
+    return merged
+
+
+def read_file_txt(file_path):
     # only funds from list selected
     try:
         with open(file_path, "r", encoding="utf-8") as file:
@@ -42,9 +55,27 @@ def read_file(file_path):
         logger.error(f"Error: File not found at {file_path}")
         raise
     except Exception as e:
-        logger.error(f"An error occurred: {e}")  # Catch other potential errors.
+        logger.error(f"An error occurred: {e}")
         raise
     return funds
+
+
+def read_file_csv(file_path):
+    data = {}
+    try:
+        with open(file_path, "r", newline="", encoding="utf-8") as file:
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                lowercase_row = {k.lower(): v for k, v in row.items()}
+                main_key = lowercase_row.pop(constants.favorites_main_key)
+                data[main_key] = lowercase_row
+    except FileNotFoundError:
+        logger.error(f"Error: File not found at {file_path}")
+        raise
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        raise
+    return data
 
 
 def check_args(args):
@@ -61,13 +92,20 @@ def check_args(args):
             isin_path = args.isin
             if os.access(f"{os.getcwd()}/{args.isin}", os.R_OK):
                 isin_path = f"{os.getcwd()}/{args.isin}"
-            res = read_file(isin_path)
+            res = read_file_txt(isin_path)
             if not all([isin.is_valid(item) for item in res]):
                 raise OSError(f"File {isin_path} is not a valid list of ISIN")
             logger.warning(f"File {isin_path} containing list of funds has been provided")
             args.isin = res
         else:
             raise OSError(f"File {args.isin} is not a readable file or not a valid list of ISIN")
+
+    if os.access(args.favorites, os.R_OK) or os.access(f"{os.getcwd()}/{args.favorites}", os.R_OK):
+        logger.warning("A csv file with favorite funds has been found")
+        args.favorites = read_file_csv(args.favorites)
+        args.isin = merge_lists_deduped(args.isin, list(args.favorites.keys()))
+    else:
+        args.favorites = {}
 
     if not os.access(os.path.dirname(args.file), os.W_OK):
         raise OSError(f"Directory {os.path.dirname(args.file)} is not writable !")
