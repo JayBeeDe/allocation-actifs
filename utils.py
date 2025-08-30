@@ -104,7 +104,8 @@ def check_args(args):
     if os.access(args.favorites, os.R_OK) or os.access(f"{os.getcwd()}/{args.favorites}", os.R_OK):
         logger.warning("A csv file with favorite funds has been found")
         args.favorites = read_file_csv(args.favorites)
-        args.isin = merge_lists_deduped(args.isin, list(args.favorites.keys()))
+        if args.isin is not None:
+            args.isin = merge_lists_deduped(args.isin, list(args.favorites.keys()))
     else:
         args.favorites = {}
 
